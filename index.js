@@ -8,6 +8,8 @@ let PostRoutes = require('./Routes/PostRoutes');
 
 let uri = `mongodb+srv://${process.env.username}:${process.env.password}@go-nakli.9rao9tp.mongodb.net/${process.env.database}?appName=GO-NAKLI`;
 
+app.use(express.json());
+
 app.use(GetRoutes);
 app.use(PostRoutes);
 

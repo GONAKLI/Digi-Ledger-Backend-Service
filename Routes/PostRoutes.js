@@ -1,9 +1,11 @@
 let express = require('express');
-const { default: Otps } = require('../Schema/Otp');
+const Otps = require('../Schema/Otp');
 let Router = express.Router();
 
 
 Router.post('/login', (req,res)=>{
+  
+   
     let phone = req.body.phone;
     let TempAuth = new Otps({
       phone: phone
