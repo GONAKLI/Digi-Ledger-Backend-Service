@@ -9,4 +9,4 @@ let Otp = mongoose.Schema({
 
 
 let Otps = mongoose.model('Otp', Otp, 'Otp');
-export default Otps;
+module.exports = Otps
