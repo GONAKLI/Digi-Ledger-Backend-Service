@@ -1,9 +1,8 @@
 let mongoose = require('mongoose')
 
-let Otp = mongoose.Schema({
+let Otp = new mongoose.Schema({
     phone: {type:Number, required:true},
-    otp:{type:Number, required:true, default:Math.floor(100000 + Math.random()*100000)
- }
+    otp:{type:Number, required:true, default:()=> Math.floor(100000 + Math.random()*100000) }
 
 })
 
