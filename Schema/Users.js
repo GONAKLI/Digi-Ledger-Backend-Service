@@ -1,30 +1,59 @@
-let mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-let User = new mongoose.Schema({
-     name:{type:String, required:true},
-     phone:{type:Number, required:true},
-     email:{type:String, required:true},
-     location:String,
-     creationDate:{type:Date, default:Date.now},
-     Customer : [
-        {
-            name: {type: String, required:true},
-            phone: {type: Number, required:true},
-            address: String,
-            creationDate: {type:Date, default:Date.now},
-            photo: String,
-            transactions: [
-                {
-                    amount: Number,
-                    note : String,
-                    type : String,
-                    date: String,
-                }
-            ]
-        }
-     ]
-})
+const TransactionSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  note: { type: String, required: true, trim: true, default: "No note" },
+  type: {
+    type: String,
+    required: true,
+    trim: true,
+    enum: ["given", "received"],
+  },
+  date: { type: Date, default: Date.now },
+});
 
+const CustomerSchema = new mongoose.Schema({
+  name: { type: String, required: true, trim: true },
+  customerPhone: {
+    type: Number,
+    required: true,
+    validate: {
+      validator: (v) => /^\d{10}$/.test(v.toString()),
+      message: "Customer phone must be 10 digits",
+    },
+  },
+  address: { type: String, trim: true, default: "" },
+  creationDate: { type: Date, default: Date.now },
+  transactions: [TransactionSchema],
+});
 
-let Users = mongoose.model('User', User, 'User')
-module.exports = Users
+const UserSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: false, trim: true, default: "" },
+    phone: {
+      type: Number,
+      required: true,
+      unique: true,
+      validate: {
+        validator: (v) => /^\d{10}$/.test(v.toString()),
+        message: "Phone must be 10 digits",
+      },
+    },
+    email: { type: String, required: false, trim: true, lowercase: true },
+    authToken: { type: String, required: true, unique: true },
+    // Path to profile picture (served from user's own file server)
+    profilePic: { type: String, trim: true, default: "" },
+    // Hashed PIN for app lock (empty = disabled)
+    appPin: { type: String, default: "" },
+    location: { type: String, trim: true },
+    creationDate: { type: Date, default: Date.now },
+    Customer: [CustomerSchema],
+  },
+  { timestamps: true }
+);
+
+UserSchema.index({ authToken: 1 });
+UserSchema.index({ phone: 1 });
+
+const Users = mongoose.model("User", UserSchema, "User");
+module.exports = Users;

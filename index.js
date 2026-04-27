@@ -1,20 +1,30 @@
-let express = require('express');
-let app = express();
-let mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
 require('dotenv').config();
-let GetRoutes = require('./Routes/GetRoutes');
-let PostRoutes = require('./Routes/PostRoutes');
 
+const app = express();
+const GetRoutes = require('./Routes/GetRoutes');
+const PostRoutes = require('./Routes/PostRoutes');
 
-let uri = `mongodb+srv://${process.env.username}:${process.env.password}@go-nakli.9rao9tp.mongodb.net/${process.env.database}?appName=GO-NAKLI`;
+const uri = `mongodb+srv://${process.env.username}:${process.env.password}@go-nakli.9rao9tp.mongodb.net/${process.env.database}?appName=GO-NAKLI`;
 
-app.use(express.json());
+let PORT = process.env.PORT || 5005;
+
+app.use(express.json({ limit: '10mb' })); // Added limit for security
+app.use(cors());
 
 app.use(GetRoutes);
 app.use(PostRoutes);
 
-mongoose.connect(uri).then(()=>{
-    app.listen(5005,'0.0.0.0', ()=>{
-        console.log('http://localhost:5005')
-    })
-})
+mongoose.connect(uri)
+  .then(() => {
+    console.log('Connected to MongoDB');
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Failed to connect to MongoDB:', error);
+    process.exit(1); // Exit on connection failure
+  });
