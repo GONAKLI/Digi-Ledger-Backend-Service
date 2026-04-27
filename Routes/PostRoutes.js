@@ -4,6 +4,11 @@ const Otps = require("../Schema/Otp");
 const Users = require("../Schema/Users");
 const Feedback = require("../Schema/Feedback");
 
+//Twillio sms setup
+const accountSid = 'AC6956406c159740a57145d773eeefd6e2';
+const authToken = '1586e85cb889dd8cbe7b78edf2fc57ad';
+const client = require('twilio')(accountSid, authToken);
+
 const Router = express.Router();
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -32,6 +37,13 @@ Router.post("/loginOtp", async (req, res) => {
 
     const newOtp = new Otps({ phone: phoneNumber });
     await newOtp.save();
+
+    await client.messages
+    .create({
+        body: `${newOtp.otp} is your OTP for Mobile Khata App. Do not share it with anyone.`,
+        from: '+19785708337',
+        to: `+91${phoneNumber}`
+    })
 
     // console.log(`[OTP] Phone: ${phoneNumber} | OTP: ${newOtp.otp}`); // dev only
 
