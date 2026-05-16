@@ -33,10 +33,6 @@ Router.post("/loginOtp", async (req, res) => {
     const newOtp = new Otps({ phone: phoneNumber });
     await newOtp.save();
 
-
-
-    // console.log(`[OTP] Phone: ${phoneNumber} | OTP: ${newOtp.otp}`); // dev only
-
     return res.status(200).json({ phone: phoneNumber });
   } catch (error) {
     console.error("[/loginOtp]", error);
