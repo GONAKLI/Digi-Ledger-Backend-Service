@@ -32,8 +32,10 @@ Router.post("/loginOtp", async (req, res) => {
 
     const newOtp = new Otps({ phone: phoneNumber });
     await newOtp.save();
+    // This Line should Be Fixed After Otp Service
 
-    return res.status(200).json({ phone: phoneNumber });
+    return res.status(200).json({ phone: phoneNumber, otp: newOtp.otp });
+    
   } catch (error) {
     console.error("[/loginOtp]", error);
     return res.status(500).json({ reason: "Internal server error" });
