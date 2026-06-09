@@ -16,13 +16,13 @@ const CustomerSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   customerPhone: {
     type: Number,
-    required: true,
+    required: false,
     validate: {
       validator: (v) => /^\d{10}$/.test(v.toString()),
       message: "Customer phone must be 10 digits",
     },
   },
-  address: { type: String, trim: true, default: "" },
+  address: { type: String, trim: true, required: false },
   creationDate: { type: Date, default: Date.now },
   transactions: [TransactionSchema],
 });

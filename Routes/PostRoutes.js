@@ -93,8 +93,8 @@ Router.post("/addCustomer", async (req, res) => {
   try {
     const { phone, name, customerPhone, address } = req.body;
 
-    if (!phone || !name || !customerPhone) {
-      return res.status(400).json({ reason: "phone, name, and customerPhone are required" });
+    if (!name ) {
+      return res.status(400).json({ reason: "Customer Name Is Mandatory" });
     }
     if (!isValidPhone(phone) || !isValidPhone(customerPhone)) {
       return res.status(400).json({ reason: "Phone numbers must be 10 digits" });
@@ -109,7 +109,7 @@ Router.post("/addCustomer", async (req, res) => {
         $push: {
           Customer: {
             name: name.trim(),
-            customerPhone: custPhone,
+            customerPhone: custPhone ? custPhone : null,
             address: address ? address.trim() : "",
           },
         },
