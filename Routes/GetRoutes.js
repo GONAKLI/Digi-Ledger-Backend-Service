@@ -11,6 +11,8 @@ const router = express.Router();
 router.get("/getCustomer/:authToken", async (req, res) => {
   try {
     const { authToken } = req.params;
+  
+    
 
     if (!authToken || typeof authToken !== "string" || authToken.trim().length === 0) {
       return res.status(400).json({ reason: "Invalid auth token" });
@@ -20,6 +22,9 @@ router.get("/getCustomer/:authToken", async (req, res) => {
       .select("Customer name profilePic")
       .lean();
 
+  
+      
+
     if (!user) {
       return res.status(401).json({ reason: "Unauthorized" });
     }
@@ -27,7 +32,7 @@ router.get("/getCustomer/:authToken", async (req, res) => {
     const customers = (user.Customer || []).map((c) => ({
       _id: c._id,
       name: c.name,
-      customerPhone: c.customerPhone,
+      customerPhone: c.customerPhone || null,
       address: c.address || "",
       creationDate: c.creationDate,
       transactions: (c.transactions || []).map((t) => ({

@@ -22,13 +22,13 @@ function hashPin(pin) {
 Router.post("/loginOtp", async (req, res) => {
   try {
     const { phone } = req.body;
-
+    
     if (!phone || !isValidPhone(phone)) {
       return res.status(400).json({ reason: "Invalid phone number. Must be 10 digits." });
     }
 
     const phoneNumber = Number(phone);
-    await Otps.findOneAndDelete({ phone: phoneNumber });
+    const deleteResult = await Otps.deleteMany({ phone: phoneNumber });
 
     const newOtp = new Otps({ phone: phoneNumber });
     await newOtp.save();

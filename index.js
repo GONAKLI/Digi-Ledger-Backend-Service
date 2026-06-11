@@ -9,7 +9,7 @@ const PostRoutes = require('./Routes/PostRoutes');
 
 
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@go-nakli.9rao9tp.mongodb.net/${process.env.database}?appName=GO-NAKLI`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@go-nakli.9rao9tp.mongodb.net/${process.env.DB_NAME}?appName=GO-NAKLI`;
 
 let PORT = process.env.PORT || 5005;
 
