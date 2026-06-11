@@ -20,7 +20,7 @@ const CustomerSchema = new mongoose.Schema({
     validate: {
       validator: (v) =>{
         if(v == null || undefined){
-          return false;
+          return true;
         }
        return /^\d{10}$/.test(v.toString())},
       message: "Customer phone must be 10 digits",
